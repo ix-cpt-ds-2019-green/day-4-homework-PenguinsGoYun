@@ -1,0 +1,68 @@
+---
+title: "4c-Exercises"
+author: "Yeon Kim"
+date: "7/4/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r load_libraries, warning=FALSE, echo=FALSE, results=FALSE, message=FALSE}
+library(nycflights13)
+library(tidyverse)
+library(lubridate)
+library(datasets)
+library(caret)
+library(e1071)
+```
+
+
+## 1
+
+```{r exercise1, warning=FALSE}
+# 1
+# Histogram
+ggplot(data=ChickWeight, aes(x=weight)) + 
+  geom_histogram(binwidth=15, fill="lightblue", color="black")
+
+# qq
+{qqnorm(ChickWeight$weight)
+qqline(ChickWeight$weight)}
+
+# log transform
+p <- transform(ChickWeight, logWeight=log(weight))
+# sqrt transform
+p <- transform(p, sqrtWeight=sqrt(weight))
+
+{qqnorm(p$logWeight)
+qqline(p$logWeight)}
+
+{qqnorm(p$sqrtWeight)
+qqline(p$sqrtWeight)}
+
+
+# boxcox transform
+boxcox <- BoxCoxTrans(p$weight, fudge = 0.05)
+{qqnorm(predict(boxcox, p$weight))
+qqline(predict(boxcox, p$weight))}
+```
+
+## 2
+
+```{r exercise2, warning=FALSE}
+p1 <- rnorm(1000, mean=0, sd=0.5)
+{qqnorm(p1)
+qqline(p1)}
+
+p2 <- rexp(1000, rate=10)
+{qqnorm(p2)
+qqline(p2)}
+
+histogram(log(p2))
+
+p3 <- transform(p2, log)
+{qqnorm(p3$X_data)
+qqline(p3)}
+```
